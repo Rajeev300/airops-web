@@ -5,34 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AirOps Web App</title>
   <link rel="stylesheet" href="styles.css"/>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    #data {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .card {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      max-width: 300px;
-      overflow-x: auto;
-    }
-  </style>
 </head>
 <body>
   <h1>AirOps Data</h1>
@@ -43,7 +15,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Your Firebase config
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBYuzaaoxDEJwfsUv-9fXipm22Qz2gzwhk",
       authDomain: "airops-3ci40.firebaseapp.com",
@@ -58,14 +30,14 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Correct collection name
+    // Firestore collection
     const collectionName = "AirOps";
 
     async function loadData() {
+      const container = document.getElementById("data");
+      container.innerHTML = ""; // Clear previous content
       try {
         const snapshot = await getDocs(collection(db, collectionName));
-        const container = document.getElementById("data");
-        container.innerHTML = ""; // Clear previous content
         if (snapshot.empty) {
           container.innerHTML = "<p>No data found.</p>";
           return;
@@ -78,7 +50,7 @@
         });
       } catch (error) {
         console.error("Error loading data:", error);
-        document.getElementById("data").innerHTML = "<p>Error loading data.</p>";
+        container.innerHTML = "<p>Error loading data.</p>";
       }
     }
 
