@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AIROPS Web App</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <h1>AIROPS Data</h1>
+  <div id="data"></div>
+
+  <script type="module">
+    // Import Firebase SDK
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYuzaaoxDEJwfsUv-9fXipm22Qz2gzwhk",
+      authDomain: "airops-3ci40.firebaseapp.com",
+      projectId: "airops-3ci40",
+      storageBucket: "airops-3ci40.firebasestorage.app",
+      messagingSenderId: "511521678042",
+      appId: "1:511521678042:web:6e3353052102ee4b4cfbe3",
+      measurementId: "G-YXYSDVZZLB"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Change this to your Firestore collection name
+    const collectionName = "airops"; 
+
+    async function loadData() {
+      try {
+        const snapshot = await getDocs(collection(db, collectionName));
+        const container = document.getElementById("data");
+        if (snapshot.empty) {
+          container.innerHTML = "<p>No data found.</p>";
+          return;
+        }
+        snapshot.forEach(doc => {
+          const item = document.createElement("div");
+          item.classList.add("card");
+          item.innerHTML = `<h3>${doc.id}</h3><pre>${JSON.stringify(doc.data(), null, 2)}</pre>`;
+          container.appendChild(item);
+        });
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
